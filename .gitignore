@@ -1,0 +1,5 @@
+/data/src_dir/*
+!/data/src_dir/.gitignore
+/data/dst_dir/*
+!/data/dst_dir/.gitignore
+
