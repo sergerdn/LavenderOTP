@@ -2,7 +2,7 @@ import base64
 import glob
 import logging
 import os
-from typing import Union
+from typing import Union, List
 from urllib.parse import urlparse, parse_qs
 
 from PIL import Image
@@ -18,12 +18,13 @@ logger = logging.getLogger("[lavender-otp]")
 
 class LavenderOcrWorker(object):
     src_dir: str
-    found = False
-    filename_ocr = []
+    found: bool
+    filename_ocr: List[str]
 
     def __init__(self, src_dir: str, dst_dir: str):
         self.src_dir = src_dir
         self.dst_dir = dst_dir
+        self.filename_ocr = []
 
     def ocr(self) -> bool:
         if not self._norm_dir(self.src_dir):
