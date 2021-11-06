@@ -9,6 +9,7 @@ from PIL import Image
 from PIL import UnidentifiedImageError
 from pyzbar import pyzbar
 
+from ocr.models import OtpItem
 from proto.v1.gauth_pb2 import MigrationPayload
 
 logger = logging.getLogger("[lavender-otp]")
@@ -62,16 +63,31 @@ class LavenderOcrWorker(object):
                     payload.ParseFromString(data)
                     dst_filename = os.path.join(self.dst_dir, "%s.accounts.txt" % os.path.basename(filename))
                     with open(dst_filename, "w") as fp:
-                        for find in payload.otp_parameters:
+                        for entry in payload.otp_parameters:
                             self.found = True
+
+                            secret = str(base64.b32encode(entry.secret), 'utf-8').replace('=', '')
+                            try:
+                                item = OtpItem(
+                                    secret=secret,
+                                    name=entry.name,
+                                    issuer=entry.issuer,
+                                    algorithm=entry.algorithm,
+                                    digits=entry.digits,
+                                    type=entry.type
+                                )
+                            except ValueError:
+                                logger.error("invalid entry: %s", entry)
+                                continue
+
                             fp.write(f"#################################\n")
-                            secret = str(base64.b32encode(find.secret), 'utf-8').replace('=', '')
+
                             fp.write(f"secret: {secret}\n")
-                            fp.write(f"name: {find.name}\n")
-                            fp.write(f"issuer: {find.issuer}\n")
-                            fp.write(f"algorithm: {find.algorithm}\n")
-                            fp.write(f"digits: {find.digits}\n")
-                            fp.write(f"type:: {find.type:}\n")
+                            fp.write(f"name: {item.name}\n")
+                            fp.write(f"issuer: {item.issuer}\n")
+                            fp.write(f"algorithm: {item.algorithm}\n")
+                            fp.write(f"digits: {item.digits}\n")
+                            fp.write(f"type:: {item.type:}\n")
 
         return self.found
 
