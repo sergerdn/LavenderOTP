@@ -10,7 +10,7 @@ poetry install
 ```
 - install `make`
 ### How to:
-- put your images with ocr codes to data/src
+- put your images with ocr codes to data/src_dir
 - run:
 ```bash
 make 
