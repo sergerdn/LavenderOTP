@@ -14,4 +14,4 @@ class OtpEntry(BaseModel):
         if len(v) != 24:
             raise ValidationError("secret length must be 24 chairs, got length: %d" % len(v))
         if v != v.upper():
-            raise ValidationError("password must be alpha(upper) numeric")
+            raise ValidationError("secret must be alpha(upper) numeric")
