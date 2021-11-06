@@ -19,3 +19,10 @@ clean:
 otp:
 	python extractor.py data/src_dir data/dst_dir
 	ls -lia data/dst_dir
+
+lint:
+	find . -type f -name "*.py" | xargs pylint
+
+lint_fix:
+	python -m black .
+	autopep8 --in-place --recursive .

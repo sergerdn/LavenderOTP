@@ -12,7 +12,7 @@ based on https://github.com/scito/extract_otp_secret_keys
     1. install poetry from https://python-poetry.org/
     2. install python deps:
   ```bash 
-  poetry install
+  poetry install --no-dev
   ```
     3. install `make`
 
