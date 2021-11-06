@@ -1,4 +1,4 @@
-# LavenderOTP
+# LavenderOTP (proof of concept)
 Extract data from Google Authenticator       
 based on https://github.com/scito/extract_otp_secret_keys
 

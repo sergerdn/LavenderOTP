@@ -63,31 +63,31 @@ class LavenderOcrWorker(object):
                     payload.ParseFromString(data)
                     dst_filename = os.path.join(self.dst_dir, "%s.accounts.txt" % os.path.basename(filename))
                     with open(dst_filename, "w") as fp:
-                        for entry in payload.otp_parameters:
+                        for item in payload.otp_parameters:
                             self.found = True
 
-                            secret = str(base64.b32encode(entry.secret), 'utf-8').replace('=', '')
+                            secret = str(base64.b32encode(item.secret), 'utf-8').replace('=', '')
                             try:
-                                item = OtpEntry(
+                                entry = OtpEntry(
                                     secret=secret,
-                                    name=entry.name,
-                                    issuer=entry.issuer,
-                                    algorithm=entry.algorithm,
-                                    digits=entry.digits,
-                                    type=entry.type
+                                    name=item.name,
+                                    issuer=item.issuer,
+                                    algorithm=item.algorithm,
+                                    digits=item.digits,
+                                    type=item.type
                                 )
                             except ValueError:
-                                logger.error("invalid entry: %s", entry)
+                                logger.error("invalid entry: %s", item)
                                 continue
 
                             fp.write(f"#################################\n")
-
-                            fp.write(f"secret: {secret}\n")
-                            fp.write(f"name: {item.name}\n")
-                            fp.write(f"issuer: {item.issuer}\n")
-                            fp.write(f"algorithm: {item.algorithm}\n")
-                            fp.write(f"digits: {item.digits}\n")
-                            fp.write(f"type:: {item.type:}\n")
+                            fp.write(f"secret: {entry.secret}\n")
+                            fp.write(f"name: {entry.name}\n")
+                            fp.write(f"issuer: {entry.issuer}\n")
+                            fp.write(f"algorithm: {entry.algorithm}\n")
+                            fp.write(f"digits: {entry.digits}\n")
+                            fp.write(f"type:: {entry.type:}\n")
+                            fp.flush()
 
         return self.found
 
