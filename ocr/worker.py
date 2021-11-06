@@ -67,7 +67,7 @@ class LavenderOcrWorker(object):
                         for item in payload.otp_parameters:
                             self.found = True
 
-                            secret = str(base64.b32encode(item.secret), 'utf-8').replace('=', '')
+                            secret = str(base64.b32encode(item.secret), "utf-8").replace("=", "")
                             try:
                                 entry = OtpEntry(
                                     secret=secret,
@@ -75,7 +75,7 @@ class LavenderOcrWorker(object):
                                     issuer=item.issuer,
                                     algorithm=item.algorithm,
                                     digits=item.digits,
-                                    type=item.type
+                                    type=item.type,
                                 )
                             except ValidationError:
                                 logger.error("invalid entry: %s", item)
