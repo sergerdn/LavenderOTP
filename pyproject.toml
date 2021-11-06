@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "lavenderotp"
 version = "0.1.0"
-description = ""
+description = "LavenderOTP extract secret keys from Google Authenticator exported images."
 authors = ["Sergey <64213648+sergerdn@users.noreply.github.com>"]
 
 [tool.poetry.dependencies]
