@@ -2,6 +2,8 @@
 Extract data from Google Authenticator       
 based on https://github.com/scito/extract_otp_secret_keys
 
+![Example Export!](./docs/example_export.jpeg "Example export")
+
 ## Install deps:
 - install poetry from https://python-poetry.org/
 - install python deps:
