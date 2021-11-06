@@ -13,6 +13,9 @@ all:
 proto:
 	protoc --python_out=.  proto/v1/gauth.proto
 
+clean:
+	rm data/dst_dir/*.txt
+
 otp:
 	python extractor.py data/src_dir data/dst_dir
 	ls -lia data/dst_dir
