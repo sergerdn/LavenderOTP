@@ -26,10 +26,9 @@ class LavenderOcrWorker(object):
         self.dst_dir = dst_dir
 
     def ocr(self) -> bool:
-        self.src_dir = self._norm_dir(self.src_dir)
-        if not self.src_dir:
+        if not self._norm_dir(self.src_dir):
             return False
-        self.dst_dir = self._norm_dir(self.dst_dir)
+
         if not self.dst_dir:
             return False
 
@@ -102,7 +101,9 @@ class LavenderOcrWorker(object):
             logger.error(f"doesn't exists or not dir: {src_dir}")
             return False
 
-        return src_dir
+        self.src_dir = src_dir
+
+        return True
 
     def _get_files(self):
         for filename in glob.glob(os.path.join(self.src_dir, "*.*")):

@@ -14,16 +14,18 @@ app = typer.Typer()
 
 
 @app.command()
-def extract(src_dir: str, dst_dir: str):
+def extract(src_dir: str, dst_dir: str) -> bool:
     typer.echo(f"Running with src_dir: {src_dir}, dst_dir: {dst_dir}...")
     worker = LavenderOcrWorker(src_dir=src_dir, dst_dir=dst_dir)
     if not worker.ocr():
         logger.error("failed ocr")
-        return
+        return False
 
     if not worker.otp():
         logger.error("failed otp")
-        return
+        return False
+
+    return True
 
 
 if __name__ == "__main__":

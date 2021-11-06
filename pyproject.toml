@@ -19,6 +19,8 @@ pydantic = "^1.8.2"
 autopep8 = "^1.6.0"
 pylint = "^2.11.1"
 black = "^21.10b0"
+mypy = "^0.910"
+types-protobuf = "^3.18.0"
 
 [tool.pylint.format]
 max-line-length = 180

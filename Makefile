@@ -23,6 +23,9 @@ otp:
 lint:
 	find . -type f -name "*.py" | xargs pylint
 
+mypy:
+	mypy ocr
+
 lint_fix:
 	python -m black .
 	autopep8 --in-place --recursive .
