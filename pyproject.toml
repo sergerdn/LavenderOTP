@@ -20,6 +20,9 @@ autopep8 = "^1.6.0"
 pylint = "^2.11.1"
 black = "^21.10b0"
 
+[tool.pylint.format]
+max-line-length = 180
+
 [tool.autopep8]
 max_line_length = 180
 exclude="*_pb2.py"

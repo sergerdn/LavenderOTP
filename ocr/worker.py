@@ -25,22 +25,22 @@ class LavenderOcrWorker(object):
         self.src_dir = src_dir
         self.dst_dir = dst_dir
 
-    def ocr(self):
+    def ocr(self) -> bool:
         self.src_dir = self._norm_dir(self.src_dir)
         if not self.src_dir:
-            return
+            return False
         self.dst_dir = self._norm_dir(self.dst_dir)
         if not self.dst_dir:
-            return
+            return False
 
         for filename in self._get_files():
             for data in self._get_text(filename):
                 self.found = True
                 dst_filename = os.path.join(self.dst_dir, "%s.txt" % os.path.basename(filename))
-                with open(dst_filename, "wb") as fp:
-                    fp.write(data)
-                    fp.write(b"\n")
-                logger.debug(f"wrote data from file: {os.path.basename(filename)}")
+                with open(dst_filename, "wb") as fp_dst:
+                    fp_dst.write(data)
+                    fp_dst.write(b"\n")
+                logger.debug("wrote data from file: %s" % os.path.basename(filename))
                 self.filename_ocr.append(dst_filename)
 
         return self.found
@@ -48,14 +48,14 @@ class LavenderOcrWorker(object):
     def otp(self):
         self.found = False
         for filename in self.filename_ocr:
-            with open(filename, "rb") as fp:
-                for line in fp:
+            with open(filename, "rb") as fp_ocr:
+                for line in fp_ocr:
                     line = line.strip()
                     parsed_url = urlparse(line)
                     params = parse_qs(parsed_url.query)
                     data = params.get(b"data")
                     if not data or len(data) == 0:
-                        logger.error(f"wrong data: {line}")
+                        logger.error("wrong data: %s" % line)
                         continue
 
                     data_encoded = data[0]
@@ -63,7 +63,7 @@ class LavenderOcrWorker(object):
                     payload = MigrationPayload()
                     payload.ParseFromString(data)
                     dst_filename = os.path.join(self.dst_dir, "%s.accounts.txt" % os.path.basename(filename))
-                    with open(dst_filename, "w") as fp:
+                    with open(dst_filename, "w") as fp_ocr:
                         for item in payload.otp_parameters:
                             self.found = True
 
@@ -81,14 +81,14 @@ class LavenderOcrWorker(object):
                                 logger.error("invalid entry: %s", item)
                                 continue
 
-                            fp.write(f"#################################\n")
-                            fp.write(f"secret: {entry.secret}\n")
-                            fp.write(f"name: {entry.name}\n")
-                            fp.write(f"issuer: {entry.issuer}\n")
-                            fp.write(f"algorithm: {entry.algorithm}\n")
-                            fp.write(f"digits: {entry.digits}\n")
-                            fp.write(f"type:: {entry.type:}\n")
-                            fp.flush()
+                            fp_ocr.write("#################################\n")
+                            fp_ocr.write(f"secret: {entry.secret}\n")
+                            fp_ocr.write(f"name: {entry.name}\n")
+                            fp_ocr.write(f"issuer: {entry.issuer}\n")
+                            fp_ocr.write(f"algorithm: {entry.algorithm}\n")
+                            fp_ocr.write(f"digits: {entry.digits}\n")
+                            fp_ocr.write(f"type:: {entry.type:}\n")
+                            fp_ocr.flush()
 
         return self.found
 
@@ -120,7 +120,7 @@ class LavenderOcrWorker(object):
 
         output = pyzbar.decode(img)
         if len(output) == 0:
-            logger.warning(f"skipped because can't decoded: {filename}")
+            logger.warning("skipped because can't decoded: %s" % filename)
             return
         for one in output:
             if one.data.startswith(b"otpauth-migration://"):
