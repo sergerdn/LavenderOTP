@@ -25,6 +25,7 @@ class LavenderOcrWorker(object):
         self.src_dir = src_dir
         self.dst_dir = dst_dir
         self.filename_ocr = []
+        self.found = False
 
     def ocr(self) -> bool:
         if not self._norm_dir(self.src_dir):
