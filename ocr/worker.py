@@ -9,7 +9,7 @@ from PIL import Image
 from PIL import UnidentifiedImageError
 from pyzbar import pyzbar
 
-from ocr.models import OtpItem
+from ocr.models import OtpEntry
 from proto.v1.gauth_pb2 import MigrationPayload
 
 logger = logging.getLogger("[lavender-otp]")
@@ -68,7 +68,7 @@ class LavenderOcrWorker(object):
 
                             secret = str(base64.b32encode(entry.secret), 'utf-8').replace('=', '')
                             try:
-                                item = OtpItem(
+                                item = OtpEntry(
                                     secret=secret,
                                     name=entry.name,
                                     issuer=entry.issuer,
