@@ -7,6 +7,7 @@ from urllib.parse import urlparse, parse_qs
 
 from PIL import Image
 from PIL import UnidentifiedImageError
+from pydantic import ValidationError
 from pyzbar import pyzbar
 
 from ocr.models import OtpEntry
@@ -76,7 +77,7 @@ class LavenderOcrWorker(object):
                                     digits=item.digits,
                                     type=item.type
                                 )
-                            except ValueError:
+                            except ValidationError:
                                 logger.error("invalid entry: %s", item)
                                 continue
 
